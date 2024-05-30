@@ -10,7 +10,7 @@ import { kv } from "@vercel/kv";
 
 const rateLimit = new Ratelimit({
   redis: kv,
-  limiter: Ratelimit.slidingWindow(4, "1h"),
+  limiter: Ratelimit.slidingWindow(5, "1h"),
 });
 
 export async function POST(req: NextRequest) {
