@@ -119,7 +119,9 @@ function Chat({ openChat, setOpenChat }: Props) {
               message={{
                 role: "assistant",
                 content:
-                  "Something went wrong or you might have exceeded your limit. Please try again in next couple of hours.",
+                  error.message === '{"error":"limit exceed"}'
+                    ? "you have exceeded your limit. Please try again in next couple of hours"
+                    : "Something went wrong. Please try again later.",
               }}
             />
           )}

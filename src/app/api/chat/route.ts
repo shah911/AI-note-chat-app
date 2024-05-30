@@ -8,23 +8,21 @@ import { ChatCompletionMessage } from "openai/resources/index.mjs";
 import { Ratelimit } from "@upstash/ratelimit";
 import { kv } from "@vercel/kv";
 
-// const rateLimit = new Ratelimit({
-//   redis: kv,
-//   limiter: Ratelimit.slidingWindow(8, "1h"),
-// });
-
-// export const runtime = "edge";
+const rateLimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.slidingWindow(4, "1h"),
+});
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    // const ip = req.headers.get("x-forwarded-for") || req.ip || "127.0.0.1";
+    const ip = req.headers.get("x-forwarded-for") || req.ip || "127.0.0.1";
 
-    // const { remaining } = await rateLimit.limit(ip);
+    const { remaining } = await rateLimit.limit(ip);
 
-    // if (remaining === 0) {
-    //   return Response.json({ error: "limit exceed" }, { status: 429 });
-    // }
+    if (remaining === 0) {
+      return Response.json({ error: "limit exceed" }, { status: 429 });
+    }
 
     const messages: ChatCompletionMessage[] = body.messages;
 
